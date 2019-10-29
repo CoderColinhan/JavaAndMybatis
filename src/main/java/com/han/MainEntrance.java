@@ -17,7 +17,8 @@ public class MainEntrance {
         InputStream inputStream = Resources.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
-        SqlSession session = sqlSessionFactory.openSession();
+        //参数true表示会自动提交
+        SqlSession session = sqlSessionFactory.openSession(true);
         try {
 
             BlogMapper mapper = session.getMapper(BlogMapper.class);
@@ -28,7 +29,15 @@ public class MainEntrance {
             Blog res = mapper.selectBlog(blog);
 
             System.out.println(res.getTitle());
-        } finally {
+
+            Blog blog1 = new Blog();
+            blog1.setTitle("修改后的title5");
+            mapper.saveBlog(blog1);
+            System.out.println("ok");
+
+        } catch(Exception e){
+            System.out.println(e);
+        }finally {
             session.close();
         }
     }
